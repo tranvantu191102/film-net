@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { CategoryContext } from '../contexts/CategoryContext'
 
 import Slider from '../components/slider/Slider'
@@ -7,11 +7,15 @@ import Header from '../components/header/Header'
 
 const Home = () => {
 
-    const { category, setCategory } = useContext(CategoryContext)
+    const { category } = useContext(CategoryContext)
+
+    useEffect(() => {
+        document.title = 'Home'
+    }, [])
 
     return (
         <div className=' text-primary'>
-           <Header />
+            <Header />
             <Slider
             />
             <div className="lg:px-10 md:px-5 px-3">
