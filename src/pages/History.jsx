@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { db } from '../api/firebase';
 
 import HeaderPersonal from '../components/header/HeaderPersonal'
@@ -27,7 +27,7 @@ const History = () => {
                     });
                     setData(results)
                 } else {
-                    const docRef = query(collection(db, 'history'), where('category', '==', category))
+                    const docRef = query(collection(db, 'history'), where('category', '==', category), orderBy('createAt'))
                     const querySnapshot = await getDocs(docRef);
                     const results = []
                     querySnapshot.forEach((doc) => {
