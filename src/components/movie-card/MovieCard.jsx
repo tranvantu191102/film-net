@@ -19,7 +19,7 @@ const MovieCard = ({ movie, category }) => {
                 </div>
                 <p className='limit-one-line text-2lg font-semibold w-full my-2'>{movie.title || movie.name}</p>
                 <div className='absolute top-2 left-1 px-2 py-1 bg-blue rounded-lg inline-block text-lg'>
-                    <span className='mr-1'>{movie.vote_average}</span>
+                    <span className='mr-1'>{movie?.vote_average?.toFixed(1)}</span>
                     <FontAwesomeIcon icon={faStar} />
                 </div>
             </div>
