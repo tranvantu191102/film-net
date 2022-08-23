@@ -75,19 +75,20 @@ const Search = () => {
             <div className="h-[calc(100vh-75px)]">
                 {
                     _.isEmpty(resultsSearch) && <div className="w-full tw-flex-center text-primary pt-16">
-                        <h2 className='text-2xl font-semibold'>Find your favourite movies, TV shows, people and more</h2>
+                        <h2 className='text-2xl font-semibold px-5 text-center'
+                        >Find your favourite movies, TV shows, people and more</h2>
                     </div>
                 }
                 <div className="w-full tw-flex-center text-primary mt-8 ">
-                    <form className="w-[60%] px-6 py-1 bg-gray-bg rounded-3xl"
+                    <form className="w-[90%] md:w-[70%] lg:w-[60%] md:flex md: items-center px-6 py-1 bg-gray-bg rounded-3xl"
                         onSubmit={handleSearch}
                     >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} className="text-xl pr-4" />
+                        <FontAwesomeIcon icon={faMagnifyingGlass} className="text-xl pr-4 hidden md:block" />
                         <input
                             type="text"
                             value={keyword}
                             placeholder='Search...'
-                            className='py-4 bg-transparent outline-none border-none placeholder:text-xl text-xl'
+                            className='py-4 w-[100%] md:w-auto bg-transparent outline-none border-none placeholder:text-xl text-xl'
                             onChange={(e) => handleOnChangeKeyword(e)}
                         />
                     </form>
