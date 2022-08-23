@@ -18,6 +18,7 @@ const WatchMovie = () => {
     const { category, id } = useParams()
     const [data, setData] = useState({})
     const [seasons, setSeasons] = useState({})
+    const [episodeNumber, setEpisodeNumber] = useState(1)
     const { setGenre } = useContext(CategoryContext)
     const { isLogin } = useContext(AuthContext)
     const navigate = useNavigate()
@@ -66,7 +67,11 @@ const WatchMovie = () => {
         saveHistory()
     }, [data])
 
+    const handleViewEpisode = (episode) => {
+        setEpisodeNumber(episode.episode_number)
+    }
 
+    // console.log(episodeNumber)
     return (
         <div className="">
 
@@ -74,7 +79,7 @@ const WatchMovie = () => {
                 <iframe src={
                     category === 'movie' ? `${apiConfig.urlWatch}/${category}?id=${id}`
                         :
-                        `${apiConfig.urlWatch}/${category}?id=${id}&s=1&e=1`
+                        `${apiConfig.urlWatch}/${category}?id=${id}&s=${data?.number_of_seasons}&e=${episodeNumber}`
                 }
                     frameborder="0"
                     title="Film Video Player"
@@ -93,8 +98,10 @@ const WatchMovie = () => {
                         {
                             seasons?.episodes?.map((episode, index) => (
                                 <SwiperSlide key={index}>
-                                    <div className="bg-primary-bg border-[1px] cursor-pointer hover:opacity-50
-                                     border-gray-text py-2 rounded-xl flex flex-col items-center justify-center">
+                                    <div className={`border-[1px] cursor-pointer hover:opacity-50
+                                     border-gray-text py-2 rounded-xl flex flex-col items-center justify-center
+                                     ${episodeNumber === episode.episode_number ? 'bg-gray-bg' : 'bg-primary-bg'}`}
+                                        onClick={() => handleViewEpisode(episode)}>
                                         <p className='text-primary text-base font-semibold'>{index + 1}</p>
                                         <img src={apiConfig.w185Img(episode.still_path)} alt=""
                                             className='min-h-[104px]' />
