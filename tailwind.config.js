@@ -13,7 +13,9 @@ module.exports = {
         'gray-text': '#7C7D7D',
         'gray-bg': 'rgb(51,51,53)',
         'border': 'rgb(58,57,57)',
-        'blue': 'rgb(81,121,255)'
+        'blue': 'rgb(81,121,255)',
+        'red-text': '#FF9494',
+        'green': '#008000'
       },
       fontSize: {
         sm: '12px',

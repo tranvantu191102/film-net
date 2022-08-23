@@ -1,4 +1,5 @@
 import axiosClient from "./axiosClient";
+import { apiConfig } from "./config";
 
 export const categories = {
     movie: 'movie',
@@ -41,7 +42,7 @@ export const getApi = {
     },
     getDetails: (cate, id) => {
         const url = categories[cate] + '/' + id
-        return axiosClient.get(url, {params:{}})
+        return axiosClient.get(url, { params: {} })
     },
     getVideos: (cate, id) => {
         const url = categories[cate] + '/' + id + '/videos'
@@ -59,12 +60,21 @@ export const getApi = {
         const url = categories[cate] + '/' + id + '/similar'
         return axiosClient.get(url, params)
     },
+    getRecommendations: (cate, id, params) => {
+        const url = categories[cate] + '/' + id + '/recommendations'
+        return axiosClient.get(url, params)
+    },
     getGenres: (cate) => {
         const url = 'genre/' + categories[cate] + '/list'
-        return axiosClient.get(url, {params: {}})
+        return axiosClient.get(url, { params: {} })
     },
     discover: (cate, params) => {
-        const url= 'discover/' + categories[cate] 
+        const url = 'discover/' + categories[cate]
         return axiosClient.get(url, params)
+    },
+    getDetailSeasons: (id, season) => {
+        const url = 'tv/' + id + '/season/' + season
+        return axiosClient.get(url, { params: {} })
     }
 }
+

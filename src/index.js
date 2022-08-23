@@ -7,14 +7,20 @@ import "swiper/css/pagination";
 import './index.css'
 import { BrowserRouter } from 'react-router-dom';
 import CategoryContextProvider from './contexts/CategoryContext';
+import AuthContextProvider from './contexts/AuthContext';
+import ModalContextProvider from './contexts/ModalContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <CategoryContextProvider>
-        <Layout />
-      </CategoryContextProvider>
+      <ModalContextProvider>
+        <AuthContextProvider>
+          <CategoryContextProvider>
+            <Layout />
+          </CategoryContextProvider>
+        </AuthContextProvider>
+      </ModalContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

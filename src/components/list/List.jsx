@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faArrowUp} from '@fortawesome/free-solid-svg-icons'
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 import { getApi } from '../../api/api'
 import { CategoryContext } from '../../contexts/CategoryContext'
@@ -9,104 +9,131 @@ import MovieCard from '../movie-card/MovieCard'
 
 const List = () => {
 
-    const [data, setData] = useState([])
-    const [page, setPage] = useState(1)
-    const {category,sortBy, genre} = useContext(CategoryContext)
+  const [data, setData] = useState([])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const { category, sortBy, genre } = useContext(CategoryContext)
 
 
-    useEffect(() =>{
-        const getData = async () => {
-           try {
-            let res
-          if(category === 'movie'){
-             res = await getApi.discover(category, {params:{
-                sort_by: sortBy.value,
-                with_genres: genre.id,
-                page: 1
-            }})
-          }
-
-          if(category === 'tv') {
-            res = await getApi.discover(category, {params:{
-                sort_by: sortBy.value,
-                with_genres: genre.id,
-                page: 1
-            }})
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        let res
+        setLoading(true)
+        if (category === 'movie') {
+          res = await getApi.discover(category, {
+            params: {
+              sort_by: sortBy.value,
+              with_genres: genre.id,
+              page: 1
+            }
+          })
         }
 
-            setData(res.data.results)
-           } catch (error) {
-            console.log(error)
-           }
+        if (category === 'tv') {
+          res = await getApi.discover(category, {
+            params: {
+              sort_by: sortBy.value,
+              with_genres: genre.id,
+              page: 1
+            }
+          })
         }
 
-        getData()
-    }, [sortBy, genre,category])
+        setData(res.data.results)
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
+      }
+    }
+
+    getData()
+  }, [sortBy, genre, category])
 
 
-    useEffect(() =>{
-      const getData = async () => {
-         try {
-          let res
-        if(category === 'movie'){
-           res = await getApi.discover(category, {params:{
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        let res
+        if (category === 'movie') {
+          res = await getApi.discover(category, {
+            params: {
               sort_by: sortBy.value,
               with_genres: genre.id,
               page
-          }})
+            }
+          })
         }
 
-        if(category === 'tv') {
-          res = await getApi.discover(category, {params:{
+        if (category === 'tv') {
+          res = await getApi.discover(category, {
+            params: {
               sort_by: sortBy.value,
               with_genres: genre.id,
               page
-          }})
-      }
+            }
+          })
+        }
 
-          setData(data.concat(res.data.results))
-         } catch (error) {
-          console.log(error)
-         }
+        setData(data.concat(res.data.results))
+      } catch (error) {
+        console.log(error)
       }
+    }
 
-      getData()
+    getData()
   }, [page])
 
-    console.log(data)
 
-
-    const handleClickOnTop = () => {
-      window.scrollTo({top: 0, behavior: 'smooth'})
-    }
+  const handleClickOnTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   return (
     <div className='px-5 mt-10'>
-        <InfiniteScroll 
+      <InfiniteScroll
         dataLength={data.length}
-        next={() =>setPage(prev =>prev + 1)}
+        next={() => setPage(prev => prev + 1)}
         hasMore={true}
-        >
-        <div className="flex items-center justify-between flex-wrap">
-            {
+      >
+        {
+          loading ? <div className="flex items-center justify-between flex-wrap">
+            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+            >
+            </div>
+            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+            >
+            </div>
+            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+            >
+            </div>
+            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+            >
+            </div>
+          </div>
+            :
+            <div className="flex items-center justify-between flex-wrap">
+              {
                 data && data.length > 0 &&
                 data.map((item, index) => (
                   <div className="w-[45%] md:w-[30%] lg:w-[23%] mb-3" key={index}>
-                      <MovieCard movie={item} category={category}/>
+                    <MovieCard movie={item} category={category} />
                   </div>
                 ))
-            }
-        </div>
-        </InfiniteScroll>
-       {
+              }
+            </div>
+        }
+      </InfiniteScroll>
+      {
         page > 1 &&
         <div className="fixed bottom-[30px] right-[30px] text-primary">
-        <div className="text-2xl py-2 px-5 bg-second-bg text-second rounded-full cursor-pointer"
-        onClick={handleClickOnTop}
-        >
-        <FontAwesomeIcon icon={faArrowUp}/>
+          <div className="text-2xl py-2 px-5 bg-second-bg text-second rounded-full cursor-pointer"
+            onClick={handleClickOnTop}
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </div>
         </div>
-     </div>
-       }
+      }
     </div>
   )
 }

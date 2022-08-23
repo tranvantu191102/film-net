@@ -10,7 +10,7 @@ const MovieCast = ({ casts }) => {
                     casts.map((item, index) => (
                         <div className="w-[40%] flex items-center justify-start mb-5" key={index}>
                             <img src={apiConfig.w185Img(item.profile_path)} alt=""
-                                className='w-24 h-24 rounded-full mr-2' />
+                                className='rounded-xl mr-2' />
                             <div className="">
                                 <p className='text-blue text-2lg font-semibold'>{item.name}</p>
                                 <span>as</span>

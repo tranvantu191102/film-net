@@ -30,7 +30,7 @@ const Similar = ({ category, id }) => {
             }
         }
         getData()
-    }, [])
+    }, [category, id])
     return (
         <div>
             {
@@ -76,13 +76,13 @@ const Similar = ({ category, id }) => {
                                                 <div className="overflow-hidden rounded-lg">
                                                     <img
                                                         src={apiConfig.w500Img(item.poster_path)} alt=""
-                                                        className='rounded-lg group-hover:opacity-80 min-h-[200px] md:min-h-[300px] lg:min-h-[340px] group-hover:scale-110 transform transition-all duration-200 ease-linear '
+                                                        className='rounded-lg group-hover:opacity-80 min-h-[200px] md:min-h-[300px] lg:min-h-[360px] group-hover:scale-110 transform transition-all duration-200 ease-linear '
                                                     />
                                                 </div>
-                                                <p className='limit-one-line w-full my-2'>{item.title || item.name}</p>
+                                                <p className='limit-one-line w-full my-2 text-primary'>{item.title || item.name}</p>
                                                 <div className='absolute top-2 left-1 px-2 py-1 bg-blue rounded-lg inline-block text-lg'>
-                                                    <span className='mr-1'>{item.vote_average}</span>
-                                                    <FontAwesomeIcon icon={faStar} />
+                                                    <span className='mr-1'>{item.vote_average.toFixed(1)}</span>
+                                                    <FontAwesomeIcon icon={faStar} className="text-primary" />
                                                 </div>
                                             </div>
                                         </Link>

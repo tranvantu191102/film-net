@@ -8,11 +8,13 @@ import Header from '../components/header/Header'
 import { getApi } from '../api/api'
 import MovieCard from '../components/movie-card/MovieCard'
 import Pagination from '../components/pagination/Pagination'
+import errorImage from '../assets/error.png'
 
 const Search = () => {
 
     const [keyword, setKeyword] = useState('')
     const [resultsSearch, setResultsSearch] = useState({})
+    const [loading, setLoading] = useState(false)
     const [page, setPage] = useState(resultsSearch?.page || 1)
     const { category } = useContext(CategoryContext)
 
@@ -27,6 +29,7 @@ const Search = () => {
     const handleSearch = async (e) => {
         e.preventDefault()
         if (keyword) {
+            setLoading(true)
             const res = await getApi.search(category, {
                 params: {
                     query: keyword
@@ -34,8 +37,37 @@ const Search = () => {
             })
 
             setResultsSearch(res.data)
+            setLoading(false)
         }
     }
+
+    useEffect(() => {
+        const searchByPage = async () => {
+            try {
+                if (keyword) {
+                    setLoading(true)
+                    const res = await getApi.search(category, {
+                        params: {
+                            query: keyword,
+                            page: page
+                        }
+                    })
+
+
+                    setResultsSearch(res.data)
+                    setPage(res.data.page)
+                    setLoading(false)
+                }
+            } catch (error) {
+                console.log(error);
+                setLoading(false)
+            }
+        }
+
+        searchByPage()
+    }, [page])
+
+
 
     return (
         <div>
@@ -60,21 +92,49 @@ const Search = () => {
                         />
                     </form>
                 </div>
-                <div className="flex items-center justify-between flex-wrap bg-primary-bg px-5 mt-10">
-                    {
-                        resultsSearch.results && resultsSearch.results.length > 0 &&
-                        resultsSearch.results.map((item, index) => (
-                            <div className="w-[45%] md:w-[30%] lg:w-[23%] mb-3" key={index}>
-                                <MovieCard movie={item} category={category} />
+                {
+                    loading ?
+                        <div className="flex items-center justify-between flex-wrap bg-primary-bg px-5 mt-10">
+                            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+                            >
                             </div>
-                        ))
-                    }
-                    <Pagination
-                        pageCurrent={18}
-                        totalPages={20}
-                        setPage={setPage}
-                    />
-                </div>
+                            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+                            >
+                            </div>
+                            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+                            >
+                            </div>
+                            <div className="skeleton w-[45%] md:w-[30%] lg:w-[23%] mb-3 h-[200px] md:h-[280px] lg:h-[360px]"
+                            >
+                            </div>
+                        </div>
+                        :
+                        <div className="flex items-center justify-between flex-wrap bg-primary-bg px-5 mt-10">
+                            {
+                                resultsSearch.results && resultsSearch.results.length > 0 &&
+                                resultsSearch.results.map((item, index) => (
+                                    <div className="w-[45%] md:w-[30%] lg:w-[23%] mb-3" key={index}>
+                                        <MovieCard movie={item} category={category} />
+                                    </div>
+                                ))
+                            }
+                            {
+                                resultsSearch && !_.isEmpty(resultsSearch) && resultsSearch.results.length > 0 &&
+                                <Pagination
+                                    pageCurrent={page}
+                                    totalPages={resultsSearch.total_pages}
+                                    setPage={setPage}
+                                />
+                            }
+                        </div>
+                }
+                {
+                    resultsSearch && resultsSearch?.results?.length === 0 &&
+                    <div className="flex items-center justify-center flex-col">
+                        <img src={errorImage} alt="" />
+                        <div className="text-3xl font-semibold text-primary">There is no such films</div>
+                    </div>
+                }
             </div>
         </div>
     )
